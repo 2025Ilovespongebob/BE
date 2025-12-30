@@ -1,4 +1,4 @@
-package com.seajogging.seajogging.plogging.dao;
+package com.seajogging.seajogging.plogging.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

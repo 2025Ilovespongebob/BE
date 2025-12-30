@@ -1,27 +1,32 @@
-package com.seajogging.seajogging.plogging.application;
+package com.seajogging.seajogging.plogging.api;
 
-import com.seajogging.seajogging.plogging.dto.PathResponse;
+import com.seajogging.seajogging.plogging.application.PloggingService;
+import com.seajogging.seajogging.plogging.dto.AiRouteRequest;
+import com.seajogging.seajogging.plogging.dto.AiRouteResponse;
+import com.seajogging.seajogging.plogging.dto.DailyActivityReport;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/plogging")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class PloggingController {
 
     private final PloggingService ploggingService;
 
-    @GetMapping("/recommend-path")
-    public ResponseEntity<PathResponse> getRecommendPath(
-            @RequestParam Double latitude,
-            @RequestParam Double longitude,
-            @RequestParam Double distance) {
+    @Operation(summary = "메인 리포트 조회", description = "오늘의 플로깅 활동 요약 데이터를 조회합니다.")
+    @GetMapping("/main-report")
+    public ResponseEntity<DailyActivityReport> getDailyActivityReport() {
+        return ResponseEntity.ok(ploggingService.getMainReport());
+    }
 
-        PathResponse response = ploggingService.calculatePath(latitude, longitude, distance);
-        return ResponseEntity.ok(response);
+    @Operation(summary = "AI 경로 생성", description = "사용자의 현재 위도와 경도를 바탕으로 추천 경로를 생성합니다.")
+    @PostMapping("/generate-course")
+    public AiRouteResponse generateCourse(@RequestBody AiRouteRequest request) {
+        return ploggingService.fetchAndEnrichAiRoute(request);
     }
 }

@@ -1,4 +1,4 @@
-package com.seajogging.seajogging.plogging.dao;
+package com.seajogging.seajogging.plogging.domain;
 
 import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
